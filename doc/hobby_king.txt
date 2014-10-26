@@ -1,0 +1,6 @@
+	OK	T2200.3S.20 - Turnigy 2200mAh 3S 20C Lipo Pack	RUB568.08	496	
+	OK	190000005-0 - iMAX B4 Compact 35W 4A Automatic Balance..	RUB405.00	236	
+	OK	HXT900 - HXT900 9g / 1.6kg / .12sec Micro Servo	RUB581.04	114	
+	OK	HX5010 - HXT 6.9kg / 39.2g / .16sec Twin bearing ..	RUB330.48	98	
+	OK	601A-XTTB - Male XT60 <-> Female T-Connector (1pc..	RUB45.00	19	
+	OK	XTTA-601B - Male T-Connector <-> Female XT-60 (1p..
