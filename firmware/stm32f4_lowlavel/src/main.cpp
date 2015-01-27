@@ -56,31 +56,31 @@ extern "C"
 
 	void TIM2_IRQHandler(void)
 	{
-		TIM2->SR = 0;
-		if (n >= N)
-		{
-			oldX = curX;
-			oldY = curY;
-			do
-			{
-				tarX = rand() % 60 + 28;
-				tarY = rand() % 60 + 28;
-				xStep = (tarX - oldX) / N;
-				yStep = (tarY - oldY) / N;
-			}
-			while ((fabs(xStep) < 1.0) || (fabs(yStep) < 1.0));
-			n = 0;
-		}
-		else
-		{
-			curX += xStep;
-			curY += yStep;
-			TIM3->CCR1 = (int) curX;
-			TIM3->CCR2 = (int) curY;
-			TIM3->CCR3 = (int) curX;
-			TIM3->CCR4 = (int) curY;
-			n++;
-		}
+//		TIM2->SR = 0;
+//		if (n >= N)
+//		{
+//			oldX = curX;
+//			oldY = curY;
+//			do
+//			{
+//				tarX = rand() % 60 + 28;
+//				tarY = rand() % 60 + 28;
+//				xStep = (tarX - oldX) / N;
+//				yStep = (tarY - oldY) / N;
+//			}
+//			while ((fabs(xStep) < 1.0) || (fabs(yStep) < 1.0));
+//			n = 0;
+//		}
+//		else
+//		{
+//			curX += xStep;
+//			curY += yStep;
+//			TIM3->CCR1 = (int) curX;
+//			TIM3->CCR2 = (int) curY;
+//			TIM3->CCR3 = (int) curX;
+//			TIM3->CCR4 = (int) curY;
+//			n++;
+//		}
 	}
 
 
@@ -143,13 +143,28 @@ main(int argc, char* argv[])
 	__GPIOB_CLK_ENABLE();
 	__GPIOC_CLK_ENABLE();
 	__GPIOD_CLK_ENABLE();
-	__TIM3_CLK_ENABLE();
+	__GPIOE_CLK_ENABLE();
+	__TIM1_CLK_ENABLE();
 	__TIM2_CLK_ENABLE();
+	__TIM3_CLK_ENABLE();
+	__TIM4_CLK_ENABLE();
+	__TIM8_CLK_ENABLE();
 
 	conf_pin(ENCODER1_A, INPUT, PUSH_PULL, FAST_S, PULL_DOWN);
 	conf_pin(ENCODER1_B, INPUT, PUSH_PULL, FAST_S, PULL_DOWN);
+	conf_pin(ENCODER2_A, INPUT, PUSH_PULL, FAST_S, PULL_DOWN);
+	conf_pin(ENCODER2_B, INPUT, PUSH_PULL, FAST_S, PULL_DOWN);
+	conf_af(ENCODER1_A, AF1);
+	conf_af(ENCODER1_B, AF1);
+	conf_af(ENCODER2_A, AF1);
+	conf_af(ENCODER2_B, AF1);
+	conf_pin(LED1, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(LED2, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
 	conf_pin(LED3, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
 	conf_pin(LED4, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(LED5, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(LED6, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(LED7, GENERAL, PUSH_PULL, FAST_S, NO_PULL_UP);
 	conf_pin(SERVO1, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
 	conf_pin(SERVO2, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
 	conf_pin(SERVO3, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
@@ -158,26 +173,38 @@ main(int argc, char* argv[])
 	conf_af(SERVO2, AF2);
 	conf_af(SERVO3, AF2);
 	conf_af(SERVO4, AF2);
+	conf_pin(MOTOR_1_A, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(MOTOR_1_B, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(MOTOR_2_A, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_pin(MOTOR_2_B, ALTERNATE, PUSH_PULL, FAST_S, NO_PULL_UP);
+	conf_af(MOTOR_1_A, AF3);
+	conf_af(MOTOR_1_B, AF3);
+	conf_af(MOTOR_2_A, AF3);
+	conf_af(MOTOR_2_B, AF3);
 
 	timPWMConfigure(TIM3, HAL_RCC_GetSysClockFreq() / 100000, 2000, 1, 1, 1, 1);
-	timConfigure(TIM2, HAL_RCC_GetSysClockFreq() / 1000, 20);
+	timPWMConfigure(TIM4, HAL_RCC_GetSysClockFreq() / 100000, 2000, 1, 1, 1, 1);
+	timPWMConfigure(TIM8, HAL_RCC_GetSysClockFreq() / 100000, 2000, 1, 1, 1, 1);
+	//timConfigure(TIM2, HAL_RCC_GetSysClockFreq() / 1000, 20);
 
-	NVIC_EnableIRQ(TIM2_IRQn);
+	//NVIC_EnableIRQ(TIM2_IRQn);
 
-	TIM3->CCR1 = 28;
-	TIM3->CCR2 = 28;
+	TIM8->CCR1 = 1000;
+	TIM8->CCR2 = 1000;
+	//TIM3->CCR1 = 28;
+	//TIM4->CCR1 = 28;
 
   // Infinite loop
   while (1)
     {
-	  if (!pin_val(ENCODER1_A))
-		  set_pin(LED3);
-	  else
-		  reset_pin(LED3);
-	  if (!pin_val(ENCODER1_B))
-		  set_pin(LED4);
-	  else
-		  reset_pin(LED4);
+//	  if (!pin_val(ENCODER1_A))
+//		  set_pin(LED3);
+//	  else
+//		  reset_pin(LED3);
+//	  if (!pin_val(ENCODER1_B))
+//		  set_pin(LED4);
+//	  else
+//		  reset_pin(LED4);
        // Add your code here.
     }
 }
